@@ -1,0 +1,197 @@
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+
+<odoo>
+    <record id="mp_product_booking_action_all" model="ir.actions.act_window">
+        <field name="name">Sale Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="domain">[('product_id.is_booking_type','=', True),('marketplace_seller_id','in',['get_marketplace_seller_id()'])]</field>
+        <field name="view_mode">tree,form</field>
+        <field
+            name="view_ids"
+            eval="[(5, 0, 0),
+            (0, 0, {'sequence': 1, 'view_mode': 'kanban', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_kanban_view')}),
+            (0, 0, {'sequence': 2, 'view_mode': 'tree', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_tree_view')}),
+            (0, 0, {'sequence': 3, 'view_mode': 'form', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_form_view')}),
+            ]"/>
+    </record>
+
+    <record id="mp_product_booking_action_new" model="ir.actions.act_window">
+        <field name="name">Sale Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('marketplace_state','=','new'),('product_id.is_booking_type','=', True),('marketplace_seller_id','in',['get_marketplace_seller_id()'])]</field>
+        <field
+            name="view_ids"
+            eval="[(5, 0, 0),
+            (0, 0, {'sequence': 1, 'view_mode': 'kanban', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_kanban_view')}),
+            (0, 0, {'sequence': 2, 'view_mode': 'tree', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_tree_view')}),
+            (0, 0, {'sequence': 3, 'view_mode': 'form', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_form_view')}),
+            ]"/>
+    </record>
+
+    <record id="mp_product_booking_action_pending" model="ir.actions.act_window">
+        <field name="name">Sale Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('marketplace_state','=','pending'),('product_id.is_booking_type','=', True),('marketplace_seller_id','in',['get_marketplace_seller_id()'])]</field>
+        <field
+            name="view_ids"
+            eval="[(5, 0, 0),
+            (0, 0, {'sequence': 1, 'view_mode': 'kanban', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_kanban_view')}),
+            (0, 0, {'sequence': 2, 'view_mode': 'tree', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_tree_view')}),
+            (0, 0, {'sequence': 3, 'view_mode': 'form', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_form_view')}),
+            ]"/>
+    </record>
+
+    <record id="mp_product_booking_action_approved" model="ir.actions.act_window">
+        <field name="name">Sale Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="domain">[('marketplace_state','=','approved'),('product_id.is_booking_type','=', True),('marketplace_seller_id','in',['get_marketplace_seller_id()'])]</field>
+        <field name="view_mode">tree,form</field>
+        <field
+            name="view_ids"
+            eval="[(5, 0, 0),
+            (0, 0, {'sequence': 1, 'view_mode': 'kanban', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_kanban_view')}),
+            (0, 0, {'sequence': 2, 'view_mode': 'tree', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_tree_view')}),
+            (0, 0, {'sequence': 3, 'view_mode': 'form', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_form_view')}),
+            ]"/>
+    </record>
+
+    <record id="mp_product_booking_action_done" model="ir.actions.act_window">
+        <field name="name">Sale Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="domain">[('marketplace_state','=','done'),('product_id.is_booking_type','=', True),('marketplace_seller_id','in',['get_marketplace_seller_id()'])]</field>
+        <field name="view_mode">tree,form</field>
+        <field
+            name="view_ids"
+            eval="[(5, 0, 0),
+            (0, 0, {'sequence': 1, 'view_mode': 'kanban', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_kanban_view')}),
+            (0, 0, {'sequence': 2, 'view_mode': 'tree', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_tree_view')}),
+            (0, 0, {'sequence': 3, 'view_mode': 'form', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_form_view')}),
+            ]"/>
+    </record>
+
+    <record id="mp_product_booking_action_shipped" model="ir.actions.act_window">
+        <field name="name">Sale Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="domain">[('marketplace_state','=','shipped'),('product_id.is_booking_type','=', True),('marketplace_seller_id','in',['get_marketplace_seller_id()'])]</field>
+        <field name="view_mode">tree,form</field>
+        <field
+            name="view_ids"
+            eval="[(5, 0, 0),
+            (0, 0, {'sequence': 1, 'view_mode': 'kanban', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_kanban_view')}),
+            (0, 0, {'sequence': 2, 'view_mode': 'tree', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_tree_view')}),
+            (0, 0, {'sequence': 3, 'view_mode': 'form', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_form_view')}),
+            ]"/>
+    </record>
+
+    <record id="mp_product_booking_action_cancelled" model="ir.actions.act_window">
+        <field name="name">Sale Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="domain">[('marketplace_state','=','cancel'),('product_id.is_booking_type','=', True),('marketplace_seller_id','in',['get_marketplace_seller_id()'])]</field>
+        <field name="view_mode">tree,form</field>
+        <field
+            name="view_ids"
+            eval="[(5, 0, 0),
+            (0, 0, {'sequence': 1, 'view_mode': 'kanban', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_kanban_view')}),
+            (0, 0, {'sequence': 2, 'view_mode': 'tree', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_tree_view')}),
+            (0, 0, {'sequence': 3, 'view_mode': 'form', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_form_view')}),
+            ]"/>
+    </record>
+
+    <record id="inherit_wk_marketplace_dashboard_kanban_view" model="ir.ui.view">
+        <field name="name">mp.bookings.inherit.template.kanban</field>
+        <field name="model">marketplace.dashboard</field>
+        <field name="inherit_id" ref="odoo_marketplace.wk_marketplace_dashboard_kanban_view"/>
+        <field name="arch" type="xml">
+
+            <!-- Dashboard menu options -->
+            <xpath expr="//kanban/templates/t/div/div/div[1]/div[1]/div[1]/div/div[last()]" position="before">
+                <div t-if="record.state.raw_value =='bookings'" class="row">
+                    <div class="col-xs-6 o_kanban_card_manage_section o_kanban_manage_view">
+                        <div class="o_kanban_card_manage_title">
+                            <span style="color:#a24689">View</span>
+                        </div>
+                        <div>
+                            <a name="%(mp_product_booking_action_all)d" type="action">All</a>
+                        </div>
+                        <div>
+                            <a name="%(mp_product_booking_action_new)d" type="action">New Order</a>
+                        </div>
+                        <div>
+                            <a name="%(mp_product_booking_action_approved)d" type="action">Approved Order</a>
+                        </div>
+                        <div>
+                            <a name="%(mp_product_booking_action_shipped)d" type="action">Shipped Order</a>
+                        </div>
+                        <div>
+                            <a name="%(mp_product_booking_action_cancelled)d" type="action">Cancelled Order</a>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 o_kanban_card_manage_section o_kanban_manage_new">
+                    </div>
+                </div>
+            </xpath>
+
+
+            <xpath expr="//kanban/templates/t/div/div/div[2]/div/div/div[4]" position="after">
+                <div t-if="record.state.raw_value =='bookings'" style="color:rgb(162, 70, 137)">
+                    <center><i class="fa fa-calendar fa-5x" title="calender"></i>
+                    <h3>Bookings</h3></center>
+                </div>
+            </xpath>
+
+            <!-- Dashboard options -->
+
+            <xpath expr="//kanban/templates/t/div/div/div[2]/div/div[2]" position="inside">
+                <div t-if="record.state.raw_value =='bookings'">
+                    <a class="bg-info wk_kanban_button_box text-white" name="%(mp_product_booking_action_new)d" type="action" invisible="is_seller == True" >
+                        <span class="o_value me-1"><t t-out="record.count_product_new.raw_value"/></span>
+                        <span class="o_label">New</span>
+                    </a>
+                    <a class="bg-primary wk_kanban_button_box text-white" name="%(mp_product_booking_action_pending)d" type="action" >
+                        <span class="o_value me-1"><t t-out="record.count_product_pending.raw_value"/></span>
+                        <span class="o_label">Pending</span>
+                    </a>
+                    <a class="wk_kanban_button_box text-white" name="%(mp_product_booking_action_approved)d" type="action" style="background-color:#5cb85c">
+                        <span class="o_value me-1"><t t-out="record.count_product_approved.raw_value"/></span>
+                        <span class="o_label">Approved</span>
+                    </a>
+                    <a class="wk_kanban_button_box text-white" name="%(mp_product_booking_action_done)d" type="action" style="background-color:#299903">
+                        <span class="o_value me-1"><t t-out="record.count_product_done.raw_value"/></span>
+                        <span class="o_label">Done</span>
+                    </a>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="plan_id_rec_seller" model="ir.rule">
+        <field name="name">plan.seller.rule</field>
+        <field name="model_id" ref="model_booking_plan" />
+        <field name="groups" eval="[(4, ref('odoo_marketplace.marketplace_seller_group'))]" />
+        <field name="domain_force">
+            [('marketplace_seller_id', '=', user.partner_id.id)]
+        </field>
+    </record>
+
+    <record id="plan_id_rec_officer" model="ir.rule">
+        <field name="name">plan.officer.rule</field>
+        <field name="model_id" ref="model_booking_plan" />
+        <field name="groups" eval="[(4, ref('odoo_marketplace.marketplace_officer_group'))]" />
+        <field name="domain_force">
+            [(1, '=', 1)]
+        </field>
+    </record>
+
+
+</odoo>

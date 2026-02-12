@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+
+<odoo>
+    <data noupdate="1">
+        <record model="marketplace.dashboard" id="bookings_demo">
+            <field name="name">Marketplace Booking Requests</field>
+            <field name="state">bookings</field>
+            <field name="color">6</field>
+        </record>
+    </data>
+</odoo>
