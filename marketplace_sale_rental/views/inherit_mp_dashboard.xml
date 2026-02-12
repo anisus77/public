@@ -1,0 +1,149 @@
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+
+<odoo>
+    <record id="wk_seller_rental_sale_order_line_new_action" model="ir.actions.act_window">
+        <field name="name">Sale Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('marketplace_state','=','new'),('is_rental_order','=', True),('marketplace_seller_id','in',['get_marketplace_seller_id()'])]</field>
+        <field
+            name="view_ids"
+            eval="[(5, 0, 0),
+            (0, 0, {'sequence': 1, 'view_mode': 'kanban', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_kanban_view')}),
+            (0, 0, {'sequence': 2, 'view_mode': 'tree', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_tree_view')}),
+            (0, 0, {'sequence': 3, 'view_mode': 'form', 'view_id': ref('marketplace_sale_rental.mp_rental_inherit_wk_seller_ol_form_view')}),]"
+            />
+    </record>
+    <record id="wk_seller_rental_sale_order_line_pending_action" model="ir.actions.act_window">
+        <field name="name">Sale Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('marketplace_state','=','pending'),('is_rental_order','=', True),('marketplace_seller_id','in',['get_marketplace_seller_id()'])]</field>
+        <field
+            name="view_ids"
+            eval="[(5, 0, 0),
+            (0, 0, {'sequence': 1, 'view_mode': 'kanban', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_kanban_view')}),
+            (0, 0, {'sequence': 2, 'view_mode': 'tree', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_tree_view')}),
+            (0, 0, {'sequence': 3, 'view_mode': 'form', 'view_id': ref('marketplace_sale_rental.mp_rental_inherit_wk_seller_ol_form_view')}),]"
+            />
+    </record>
+    <record id="wk_seller_rental_sale_order_line_approved_action" model="ir.actions.act_window">
+        <field name="name">Sale Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="domain">[('marketplace_state','=','approved'),('is_rental_order','=', True),('marketplace_seller_id','in',['get_marketplace_seller_id()'])]</field>
+        <field name="view_mode">tree,form</field>
+        <field
+            name="view_ids"
+            eval="[(5, 0, 0),
+            (0, 0, {'sequence': 1, 'view_mode': 'kanban', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_kanban_view')}),
+            (0, 0, {'sequence': 2, 'view_mode': 'tree', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_tree_view')}),
+            (0, 0, {'sequence': 3, 'view_mode': 'form', 'view_id': ref('marketplace_sale_rental.mp_rental_inherit_wk_seller_ol_form_view')}),]"
+            />
+    </record>
+
+    <record id="wk_seller_rental_sale_order_line_shipped_action" model="ir.actions.act_window">
+        <field name="name">Sale Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="domain">[('marketplace_state','=','shipped'),('is_rental_order','=', True),('marketplace_seller_id','in',['get_marketplace_seller_id()'])]</field>
+        <field name="view_mode">tree,form</field>
+        <field
+            name="view_ids"
+            eval="[(5, 0, 0),
+            (0, 0, {'sequence': 1, 'view_mode': 'kanban', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_kanban_view')}),
+            (0, 0, {'sequence': 2, 'view_mode': 'tree', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_tree_view')}),
+            (0, 0, {'sequence': 3, 'view_mode': 'form', 'view_id': ref('marketplace_sale_rental.mp_rental_inherit_wk_seller_ol_form_view')}),]"
+            />
+    </record>
+
+    <record id="wk_seller_rental_sale_order_line_cancelled_action" model="ir.actions.act_window">
+        <field name="name">Sale Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="domain">[('marketplace_state','=','cancel'),('is_rental_order','=', True),('marketplace_seller_id','in',['get_marketplace_seller_id()'])]</field>
+        <field name="view_mode">tree,form</field>
+		<field
+            name="view_ids"
+            eval="[(5, 0, 0),
+            (0, 0, {'sequence': 1, 'view_mode': 'kanban', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_kanban_view')}),
+            (0, 0, {'sequence': 2, 'view_mode': 'tree', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_tree_view')}),
+            (0, 0, {'sequence': 3, 'view_mode': 'form', 'view_id': ref('marketplace_sale_rental.mp_rental_inherit_wk_seller_ol_form_view')}),]"
+            />
+    </record>
+
+    <record id="mp_rental_inherit_seller_product_template_kanban" model="ir.ui.view">
+        <field name="name">mp.rental.inherit.template.kanban</field>
+        <field name="model">marketplace.dashboard</field>
+        <field name="inherit_id" ref="odoo_marketplace.wk_marketplace_dashboard_kanban_view"/>
+        <field name="arch" type="xml">
+            <!-- <xpath expr="//kanban/templates/t/div/div/div[2]/div/div[3]/div[last()]" position="before">
+                <div t-if="record.state.raw_value =='rental_order'" class="row">
+                    <div class="col-xs-6 o_kanban_card_manage_section o_kanban_manage_view">
+                        <div class="o_kanban_card_manage_title">
+                            <span style="color:#a24689">View</span>
+                        </div>
+                        <div>
+                            <a name="%(marketplace_rental_sol_action)d" invisible="is_seller" type="action">All</a>
+                        </div>
+                        <div>
+                            <a name="%(wk_seller_rental_sale_order_line_new_action)d" invisible="is_seller" type="action">New Order</a>
+                        </div>
+                        <div>
+                            <a name="%(wk_seller_rental_sale_order_line_pending_action)d" type="action">Pending Order</a>
+                        </div>
+                        <div>
+                            <a name="%(wk_seller_rental_sale_order_line_approved_action)d" type="action">Approved Order</a>
+                        </div>
+                        <div>
+                            <a name="%(wk_seller_rental_sale_order_line_shipped_action)d" type="action">Shipped Order</a>
+                        </div>
+                        <div>
+                            <a name="%(wk_seller_rental_sale_order_line_cancelled_action)d" type="action">Cancelled Order</a>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 o_kanban_card_manage_section o_kanban_manage_new">
+                    </div>
+                </div>
+            </xpath> -->
+            <xpath expr="//kanban/templates/t/div/div/div[2]/div/div/div[4]" position="after">
+                <div t-if="record.state.raw_value =='rental_order'" style="color:rgb(162, 70, 137)">
+                    <center><i class="fa fa-key fa-5x">
+                    <h3>Rental Orders</h3></i></center>
+                </div>
+            </xpath>
+            <xpath expr="//kanban/templates/t/div/div/div[2]/div/div[2]" position="inside">
+                <div t-if="record.state.raw_value =='rental_order'">
+                    <a class="bg-info wk_kanban_button_box text-white"
+                        name="%(wk_seller_rental_sale_order_line_new_action)d"
+                        type="action" invisible="is_seller">
+                        <span class="o_value"><t t-out="record.count_product_new.raw_value"/></span>
+                        <span class="o_label ms-1">New</span>
+                    </a>
+                    <a class="bg-primary wk_kanban_button_box text-white"
+                        name="%(wk_seller_rental_sale_order_line_pending_action)d"
+                        type="action">
+                        <span class="o_value"><t t-out="record.count_product_pending.raw_value"/></span>
+                        <span class="o_label ms-1">Pending</span>
+                    </a>
+                    <a class="wk_kanban_button_box text-white"
+                        name="%(wk_seller_rental_sale_order_line_approved_action)d"
+                        type="action" style="background-color:#f0ad4e">
+                        <span class="o_value"><t t-out="record.count_product_approved.raw_value"/></span>
+                        <span class="o_label ms-1">Approved</span>
+                    </a>
+                    <a class="wk_kanban_button_box text-white"
+                        name="%(wk_seller_rental_sale_order_line_shipped_action)d"
+                        type="action" style="background-color:#5cb85c">
+                        <span class="o_value"><t t-out="record.count_product_rejected.raw_value"/></span>
+                        <span class="o_label ms-1">Shipped</span>
+                    </a>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

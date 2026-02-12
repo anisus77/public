@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+<odoo>
+	<data>
+
+		<menuitem name="Rental" id= "mp_rental_root_menu"
+			sequence= "4"
+			parent= "odoo_marketplace.wk_seller_dashboard"
+			groups= "odoo_marketplace.marketplace_seller_group"
+		/>
+		<menuitem
+			name= "Rental Orders"
+			id= "mp_rental_orders_menu"
+			parent= "marketplace_sale_rental.mp_rental_root_menu"
+			sequence= "1"
+			action= "marketplace_sale_rental.marketplace_rental_sol_action"
+			groups= "odoo_marketplace.marketplace_seller_group"
+		/>
+		<menuitem
+			name= "Rental Products"
+			id= "mp_rental_products_menu"
+			parent= "marketplace_sale_rental.mp_rental_root_menu"
+			sequence= "2"
+			action= "marketplace_sale_rental.wk_seller_rental_product_template_action"
+			groups= "odoo_marketplace.marketplace_seller_group"
+		/>
+		<menuitem
+			name= "Rental Contracts"
+			id= "mp_rental_contracts_menu"
+			parent= "marketplace_sale_rental.mp_rental_root_menu"
+			sequence= "3"
+			action= "marketplace_sale_rental.marketplace_rental_contract_action"
+			groups= "odoo_marketplace.marketplace_seller_group"
+		/>
+		<menuitem
+			name= "Product Agreement"
+			id= "mp_rental_product_agreement_menu"
+			parent= "marketplace_sale_rental.mp_rental_root_menu"
+			sequence= "4"
+			action= "marketplace_sale_rental.marketplace_rental_product_agreement_action"
+			groups="odoo_marketplace.marketplace_seller_group"
+		/>
+
+	</data>
+</odoo>

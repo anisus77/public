@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+<odoo>
+    <data noupdate="1">
+
+        <record id="seller_sees_only_own_rental_product_agreement" model="ir.rule">
+            <field name="name">Seller sees Own Rental Product Agreement</field>
+            <field name="model_id" ref="odoo_sale_rental.model_rental_product_agreement"/>
+            <field name="domain_force">[('marketplace_seller_id','=',user.partner_id.id)]</field>
+            <field name="groups" eval="[(4, ref('odoo_marketplace.marketplace_seller_group'))]"/>
+        </record>
+        <record id="officer_sees_all_rental_product_agreement" model="ir.rule">
+            <field name="name">Officer sees all Rental Product Agreement</field>
+            <field name="model_id" ref="odoo_sale_rental.model_rental_product_agreement"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('odoo_marketplace.marketplace_officer_group'))]"/>
+        </record>
+
+        <record id="manager_sees_all_rental_product_agreement" model="ir.rule">
+            <field name="name">Manager sees all Rental Product Agreement</field>
+            <field name="model_id" ref="odoo_sale_rental.model_rental_product_agreement"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('odoo_marketplace.marketplace_manager_group'))]"/>
+        </record>
+
+        <record id="seller_sees_only_own_rental_order_contract" model="ir.rule">
+            <field name="name">Seller sees Own Rental Order Contract</field>
+            <field name="model_id" ref="odoo_sale_rental.model_rental_order_contract"/>
+            <field name="domain_force">[('marketplace_seller_id','=',user.partner_id.id)]</field>
+            <field name="groups" eval="[(4, ref('odoo_marketplace.marketplace_seller_group'))]"/>
+        </record>
+        <record id="officer_sees_all_rental_order_contract" model="ir.rule">
+            <field name="name">Officer sees all Rental Order Contract</field>
+            <field name="model_id" ref="odoo_sale_rental.model_rental_order_contract"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('odoo_marketplace.marketplace_officer_group'))]"/>
+        </record>
+
+        <record id="manager_sees_all_rental_order_contract" model="ir.rule">
+            <field name="name">Manager sees all Rental Order Contract</field>
+            <field name="model_id" ref="odoo_sale_rental.model_rental_order_contract"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('odoo_marketplace.marketplace_manager_group'))]"/>
+        </record>
+
+    </data>
+</odoo>

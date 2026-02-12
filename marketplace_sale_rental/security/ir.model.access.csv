@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+public_access_rental_product_agreement,rental.product.agreement.public,odoo_sale_rental.model_rental_product_agreement,,1,0,0,0
+
+seller_access_rental_reason,rental.reason.seller,odoo_sale_rental.model_rental_reason,odoo_marketplace.marketplace_seller_group,1,0,0,0
+seller_access_rental_tenure,product.rental.tenure.seller,odoo_sale_rental.model_product_rental_tenure,odoo_marketplace.marketplace_seller_group,1,1,1,1
+seller_access_rental_product_agreement,rental.product.agreement.seller,odoo_sale_rental.model_rental_product_agreement,odoo_marketplace.marketplace_seller_group,1,1,1,0
+seller_access_rental_order_contract,rental.order.contract.seller,odoo_sale_rental.model_rental_order_contract,odoo_marketplace.marketplace_seller_group,1,1,1,0
+seller.account.tax.repartition.line,account.tax.repartition.line.seller,account.model_account_tax_repartition_line,odoo_marketplace.marketplace_seller_group,1,1,1,0
+seller.account.account.tag,account.account.tag.seller,account.model_account_account_tag,odoo_marketplace.marketplace_seller_group,1,1,1,0
+
+officer_access_rental_reason,rental.reason.officer,odoo_sale_rental.model_rental_reason,odoo_marketplace.marketplace_officer_group,1,1,1,1
+officer_access_rental_tenure,product.rental.tenure.officer,odoo_sale_rental.model_product_rental_tenure,odoo_marketplace.marketplace_officer_group,1,1,1,1
+officer_access_rental_product_agreement,rental.product.agreement.officer,odoo_sale_rental.model_rental_product_agreement,odoo_marketplace.marketplace_officer_group,1,1,1,1
+officer_access_rental_order_contract,rental.order.contract.officer,odoo_sale_rental.model_rental_order_contract,odoo_marketplace.marketplace_officer_group,1,1,1,1
+ir_actions_act_window_view_seller, seller_ir_actions_act_window_view,base.model_ir_actions_act_window_view,odoo_marketplace.marketplace_seller_group,1,0,0,0

@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+<odoo>
+	<data>
+
+		<!-- Product for inherit for rental product -->
+		<record model='ir.ui.view' id='mp_rental_inherit_wk_seller_product_form_view'>
+			<field name="name">product.template.form.rental.inherit</field>
+			<field name="model">product.template</field>
+			<field name="type">form</field>
+			<field name="inherit_id" ref="odoo_marketplace.wk_seller_product_template_form_view"/>
+			<field name="arch"  type="xml">
+				<field name="public_categ_ids" position="after">
+					<div class="oe_title">
+						<field name="rental_ok"/>
+						<label for="rental_ok"/>
+					</div>
+			   </field>
+			   <notebook position="inside">
+				   <page string="Rental" name="rent" invisible="not rental_ok">
+                       <group>
+                           <group>
+                               <field name="security_amount" required="rental_ok" widget="monetary"/>
+                           </group>
+                           <group>
+                               <field name="rental_agreement_id" required="rental_ok"/>
+                           </group>
+                       </group>
+                       <group>
+                           <group>
+                               <label class="o_form_label" for="tenure_type_standard" string="Rental Tenure Type"/>
+                               <div class="oe_inline">
+                                   <field name="tenure_type_standard"/>
+                                   <label class="o_form_label" for="tenure_type_standard"/>
+                                   <br/>
+                                   <field name="tenure_type_custom"/>
+                                   <label class="o_form_label" for="tenure_type_custom"/>
+                               </div>
+                           </group>
+                           <group name="tenure_type_msg">
+                               <div style="width:300%;">
+                                   <ul>
+                                       <li class="text-muted" invisible="not tenure_type_standard">
+                                           Only standard tenure will be visible on website to the customer.
+                                       </li>
+                                       <li invisible="not tenure_type_custom">
+                                           Custom Tenure will also be Visible on website with standard tenure to the customer.
+                                       </li>
+                                       <li>
+                                           To calculate custom tenure you have to create 1 unit tenure price for each tenure UOM.
+                                       </li>
+                                   </ul>
+                               </div>
+                           </group>
+                       </group>
+                        <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                            <label for="rental_tenure_ids"/>
+                        </div>
+                       <field name="rental_tenure_ids">
+                            <tree editable="bottom">
+                                <field name="tenure_value"/>
+                                <field name="rental_uom_id" options="{'no_create' : True}"/>
+                                <field name="rent_price" widget="monetary"/>
+                                <field name="is_default"/>
+                                <field name="currency_id" column_invisible="True"/>
+								<field name="max_tenure_value"/>
+                            </tree>
+							<form>
+								<group>
+									<field name="tenure_value"/>
+	                                <field name="rental_uom_id" options="{'no_create' : True}"/>
+	                                <field name="rent_price" widget="monetary"/>
+	                                <field name="is_default"/>
+	                                <field name="currency_id" column_invisible="True"/>
+									<field name="max_tenure_value"/>
+								</group>
+							</form>
+                       </field>
+					   <group>
+   						<group>
+   							<field name="rental_tenure_id" help="Select starting tenure for this product to show in rental page on website."
+   								domain= "[('product_tmpl_id','=',active_id),('is_default','=',True)]"
+   								options="{'no_create_edit': True, 'no_open': True}"/>
+   						</group>
+   					</group>
+                       <group string="Description for Rent">
+                           <field name="description_rental" nolabel="1" colspan="2" placeholder="This note will show up on sales orders."/>
+                       </group>
+                    </page>
+				</notebook>
+			</field>
+		</record>
+
+		<record id="mp_rental_inherit_wk_seller_product_form_view_inherit" model="ir.ui.view">
+			<field name="name">mp.rental.inherit.wk.seller.product.form.view.inherit</field>
+			<field name="model">product.template</field>
+			<field name="inherit_id" ref="marketplace_sale_rental.mp_rental_inherit_wk_seller_product_form_view"/>
+			<field name="arch"  type="xml">
+				<field name="rental_agreement_id" position="after">
+                    <field name="hide_from_shop"/>
+                </field>
+                <xpath expr="//field[@name='security_amount']" position="before">
+                    <field name="rental_product_quantity" widget="radio"/>
+                </xpath>
+			</field>
+		</record>
+
+		<!-- Product search view inherit for rental product -->
+		<record id="inherit_mp_rental_product_search_view" model="ir.ui.view">
+			<field name="name">marketplace.rental.product.search.inherit</field>
+			<field name="model">product.template</field>
+			<field name="inherit_id" ref="odoo_marketplace.wk_product_template_seller_filter"/>
+			<field name="arch"  type="xml">
+				<xpath expr="//search" position="inside">
+					<filter string="Rental Product"
+						domain="[('rental_ok','=',True)]"
+						name="mp_rental_product"
+						/>
+				</xpath>
+			</field>
+		</record>
+
+		<!-- Rental Product Action -->
+		<record id="wk_seller_rental_product_template_action" model="ir.actions.act_window">
+			<field name="name">Rental Products</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">product.template</field>
+			<field name="domain">[('rental_ok','=',True),('marketplace_seller_id','in',['get_marketplace_seller_id()'])]</field>
+			<field name="view_mode">kanban,tree,form</field>
+			<field name="context">{'search_default_by_marketplace_seller_id': 1, 'detailed_type': 'product', 'pass_default_categ' : True, 'default_rental_ok': True} </field>
+			<field name="search_view_id" ref="odoo_marketplace.wk_product_template_seller_filter"/>
+			<field
+				name="view_ids"
+				eval="[(5, 0, 0),
+					(0, 0, {'sequence': 1, 'view_mode': 'kanban', 'view_id': ref('odoo_marketplace.wk_seller_product_template_kanban_view')}),
+					(0, 0, {'sequence': 2, 'view_mode': 'tree', 'view_id': ref('odoo_marketplace.wk_seller_product_template_tree_view')}),
+					(0, 0, {'sequence': 3, 'view_mode': 'form', 'view_id': ref('odoo_marketplace.wk_seller_product_template_form_view')})
+				]"/>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click to add a rental product in your product list.
+				</p>
+				<p>
+					Marketplace helps you to easily track all rental product.
+				</p>
+			</field>
+		</record>
+
+		<!-- Inherit Product Agreement view for marketplace seller -->
+		<record id="rental_product_agree_tree" model="ir.ui.view">
+			<field name="name">rental.product.agreement.tree</field>
+			<field name="model">rental.product.agreement</field>
+			<field name="arch" type="xml">
+				<tree string="Product Rental Agreement">
+					<field name="name"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="mp_rental_inherit_rental_product_agree_tree" model="ir.ui.view">
+			<field name="name">marketplace.rental.product.agreement.tree</field>
+			<field name="model">rental.product.agreement</field>
+			<field name="mode">primary</field>
+			<field name="arch" type="xml">
+				<tree string="Product Rental Agreement">
+					<field name="name"/>
+					<field name="marketplace_seller_id" groups="odoo_marketplace.marketplace_officer_group"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="mp_rental_inherit_rental_product_agree_form" model="ir.ui.view">
+			<field name="name">marketplace.rental.product.agreement.form</field>
+			<field name="model">rental.product.agreement</field>
+			<field name="mode">primary</field>
+			<field name="priority" eval="100"/>
+			<field name="inherit_id" ref="odoo_sale_rental.rental_product_agreement_view_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//form//field[@name='sequence']" position="after">
+					<field name="marketplace_seller_id"
+                       required="1"
+                       groups="odoo_marketplace.marketplace_officer_group"
+                       options="{'no_create_edit':True}"
+                       domain="[('seller','=',True),('state','=','approved')]"
+                       context="{'form_view_ref':'odoo_marketplace.wk_seller_form_view'}"
+                    />
+				</xpath>
+			</field>
+		</record>
+
+		<!-- Product Agreement search view for rental line -->
+		<record id="mp_rental_product_agreement_search_view" model="ir.ui.view">
+			<field name="name">marketplace.rental.product.agreement.search</field>
+			<field name="model">rental.product.agreement</field>
+            <field name="arch"  type="xml">
+				<search string="Search Agreement">
+                    <field name="name" string="Name"
+						filter_domain="['|',('name','ilike',self),('name','=',self)]"/>
+                </search>
+            </field>
+		</record>
+
+		<!-- Product Agreement search view inherit for rental line -->
+		<record id="inherit_mp_rental_product_agreement_search_view" model="ir.ui.view">
+			<field name="name">inherit.marketplace.rental.product.agreement.search</field>
+			<field name="model">rental.product.agreement</field>
+			<field name="inherit_id" ref="marketplace_sale_rental.mp_rental_product_agreement_search_view"/>
+			<!-- <field name="groups_id" eval="[(6, 0, [ref('odoo_marketplace.marketplace_officer_group') ])]"/> -->
+            <field name="arch"  type="xml">
+                <search position="inside">
+                    <filter string="Seller"
+                        context="{'group_by':'marketplace_seller_id'}"
+                        name="group_marketplace_seller_id"
+                        groups="odoo_marketplace.marketplace_officer_group"
+                        />
+                </search>
+            </field>
+		</record>
+
+		<!-- Sale Order Line form view inherit for rental line -->
+		<record id="mp_rental_inherit_wk_seller_ol_form_view" model="ir.ui.view">
+			<field name="name">sale.order.form.mp.rental.inherit</field>
+			<field name="model">sale.order.line</field>
+			<field name="mode">primary</field>
+			<field name="priority" eval="100"/>
+			<field name="inherit_id" ref="odoo_sale_rental.rental_sol_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//header" position="inside">
+					<button name="button_approve_ol" string="Approve" type="object" class="oe_highlight" groups="odoo_marketplace.marketplace_seller_group" invisible="marketplace_state in ['approved','shipped','cancel']"/>
+					<button name="action_view_delivery" string="Ship Now" type="object" class="oe_highlight" groups="odoo_marketplace.marketplace_seller_group" invisible="marketplace_state in ['new','shipped','cancel']"/>
+					<field name="marketplace_state" widget="statusbar" statusbar_visible="new,approved,shipped"/>
+				</xpath>
+				<xpath expr="//header//field[@name='rental_state']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//div[@name='button_box']" position="inside">
+					<button class="btn oe_stat_button text-danger"
+						name="view_current_rental_order" type="object" invisible="rental_state not in ['expired','closed','cancel']"
+						style="padding-left:5%;pointer-events: none;cursor: pointer;background-color: lightgray;">
+						<!-- <label for="rental_state"  string="Rental State:"/> -->
+						<b>Rental State:</b>
+						<br/>
+						<field name="rental_state" nolabel="1"/>
+					</button>
+					<button class="btn oe_stat_button text-success"
+						name="view_current_rental_order" type="object" invisible="rental_state not in ['ordered','confirm','in_progress']" style="padding-left:2%;pointer-events: none;cursor: pointer;background-color: lightgray;">
+						<!-- <label for="rental_state"  string="Rental State:"/> -->
+						<b>Rental State:</b>
+						<br/>
+						<field name="rental_state" nolabel="1"/>
+					</button>
+				</xpath>
+				<xpath expr="//button[@name='view_outgoing_delivery_order']" position="attributes">
+					<attribute name="invisible">marketplace_state in ['new']</attribute>
+				</xpath>
+				<xpath expr="//button[@name='view_return_delivery_order']" position="attributes">
+					<attribute name="invisible">marketplace_state in ['new']</attribute>
+				</xpath>
+				<xpath expr="//notebook" position="attributes">
+					<attribute name="invisible">marketplace_state in ['new']</attribute>
+				</xpath>
+				<xpath expr="//form" position="attributes">
+					<attribute name="create">0</attribute>
+					<attribute name="edit">0</attribute>
+				</xpath>
+				<xpath expr="//button[@name='action_view_invoice']" position="attributes">
+					<attribute name="groups">odoo_marketplace.marketplace_officer_group</attribute>
+				</xpath>
+				<xpath expr="//button[@name='action_renew_rental_order']" position="attributes">
+					<attribute name="groups">odoo_marketplace.marketplace_officer_group</attribute>
+				</xpath>
+				<xpath expr="//field[@name='order_partner_id']" position="attributes">
+					<attribute name="context">{'show_address': 1, 'form_view_ref':'odoo_marketplace.customer_form_view_for_marketplace'}</attribute>
+					<attribute name="options">{"always_reload": True,"no_open": True}</attribute>
+				</xpath>
+				<xpath expr="//field[@name='product_id']" position="attributes">
+					<attribute name="context">{'form_view_ref':'odoo_marketplace.wk_seller_product_template_form_view'}</attribute>
+					<attribute name="groups">odoo_marketplace.marketplace_officer_group</attribute>
+				</xpath>
+				<xpath expr="//field[@name='product_id']" position="after">
+					<field name="product_id" groups="!odoo_marketplace.marketplace_officer_group" options="{'always_reload': True,'no_open': True}" readonly="1" string="Product"/>
+				</xpath>
+				<xpath expr="//field[@name='order_id']" position="attributes">
+					<attribute name="options">{'no_create_edit':True,'no_open': True}</attribute>
+				</xpath>
+				<xpath expr="//field[@name='inital_rental_contract_id']" position="attributes">
+					<attribute name="context">{'form_view_ref':'marketplace_sale_rental.mp_rental_inherit_order_contract_view_form'}</attribute>
+					<attribute name="groups">odoo_marketplace.marketplace_officer_group</attribute>
+				</xpath>
+				<xpath expr="//field[@name='inital_rental_contract_id']" position="after">
+					<field name="inital_rental_contract_id" groups="!odoo_marketplace.marketplace_officer_group" options="{'always_reload': True,'no_open': True}" readonly="1" string="Initial Contract"/>
+				</xpath>
+				<xpath expr="//field[@name='current_rental_contract_id']" position="attributes">
+					<attribute name="context">{'form_view_ref':'marketplace_sale_rental.mp_rental_inherit_order_contract_view_form'}</attribute>
+					<attribute name="groups">odoo_marketplace.marketplace_officer_group</attribute>
+				</xpath>
+				<xpath expr="//field[@name='current_rental_contract_id']" position="after">
+					<field name="current_rental_contract_id" groups="!odoo_marketplace.marketplace_officer_group" options="{'always_reload': True,'no_open': True}" readonly="1" string="Current Contract"/>
+				</xpath>
+				<xpath expr="//button[@name='button_view_invoice']" position="attributes">
+					<attribute name="groups">odoo_marketplace.marketplace_officer_group</attribute>
+				</xpath>
+				<xpath expr="//button[@name='create_security_refund_invoice']" position="attributes">
+					<attribute name="groups">odoo_marketplace.marketplace_officer_group</attribute>
+				</xpath>
+				<xpath expr="//field[@name='rental_contract_ids']" position="attributes">
+					<attribute name="context">{'form_view_ref':'marketplace_sale_rental.mp_rental_inherit_order_contract_view_form'}</attribute>
+				</xpath>
+				<xpath expr="//field[@name='move_ids']" position="attributes">
+					<attribute name="context">{'form_view_ref':'odoo_marketplace.view_move_form_for_mp',
+						'tree_view_ref':'odoo_marketplace.stock_picking_stock_move_tree_view_for_mp'}</attribute>
+				</xpath>
+				<xpath expr="//field[@name='invoice_lines']" position="replace">
+					<field name="invoice_lines" readonly="1">
+						<tree>
+							<field name="sequence" widget="handle"/>
+							<field name="product_id" domain="[('sale_ok','=',True)]"/>
+							<field name="ref" column_invisible="True"/>
+							<field name="name" column_invisible="True"/>
+							<field name="quantity"/>
+							<field name="product_uom_id" groups="uom.group_uom"/>
+							<field name="price_unit"/>
+							<field name="discount" groups="base.group_no_one"/>
+							<field name="tax_ids" widget="many2many_tags" options="{'no_create': True}"/>
+							<field name="price_subtotal" sum="Total Amount"/>
+							<field name="seller_commission" sum="Total Seller Commission" widget="monetary"/>
+							<field name="currency_id" column_invisible="True"/>
+						</tree>
+					</field>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="marketplace_rental_product_agreement_action" model="ir.actions.act_window">
+			<field name="name">Marketplace Rental Product Agreement</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">rental.product.agreement</field>
+			<field name="domain">[('marketplace_seller_id','!=',False)]</field>
+			<field name="context">{"search_default_group_marketplace_seller_id": 1}</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+			  <p>
+				Here is a list of all the product agreement created by sellers of marketplace.
+			  </p>
+			</field>
+			<field name="view_ids" eval="[ (5, 0, 0),
+				(0, 0, {'sequence': 1, 'view_mode': 'tree', 'view_id': ref('marketplace_sale_rental.mp_rental_inherit_rental_product_agree_tree')}),
+				(0, 0, {'sequence': 2, 'view_mode': 'form', 'view_id': ref('marketplace_sale_rental.mp_rental_inherit_rental_product_agree_form')}),]"
+			/>
+		</record>
+
+		<!-- Marketplace Rental Orders -->
+		<record id="marketplace_rental_sol_action" model="ir.actions.act_window">
+			<field name="name">Marketplace Rental Orders</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">sale.order.line</field>
+			<field name="domain">[('marketplace_seller_id','!=',False),('is_rental_order','=', True),('state', 'not in', ('draft', 'sent')),]</field>
+			<field name="context">{'search_default_by_marketplace_state': 1,'mp_rental':1}</field>
+			<field name="search_view_id" ref="odoo_marketplace.wk_seller_product_order_line_search_view"/>
+			<field name="view_mode">kanban,tree,form</field>
+			<field name="help" type="html">
+				<p>
+					Here is a list of all the rental orders of marketplace.
+				</p>
+			</field>
+			<field name="view_ids" eval="[ (5, 0, 0),
+				(0, 0, {'sequence': 1, 'view_mode': 'kanban', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_kanban_view')}),
+				(0, 0, {'sequence': 2, 'view_mode': 'tree', 'view_id': ref('odoo_marketplace.wk_seller_product_order_line_tree_view')}),
+				(0, 0, {'sequence': 3, 'view_mode': 'form', 'view_id': ref('marketplace_sale_rental.mp_rental_inherit_wk_seller_ol_form_view')}),]"
+			/>
+		</record>
+
+		<record id="mp_rental_inherit_order_contract_view_search" model="ir.ui.view">
+			<field name="name">mp.rental.inherit.contract.search</field>
+			<field name="model">rental.order.contract</field>
+			<field name="inherit_id" ref="odoo_sale_rental.rental_order_contract_view_search"/>
+			<!-- <field name="groups_id" eval="[(6, 0, [ref('odoo_marketplace.marketplace_officer_group') ])]"/> -->
+			<field name="arch" type="xml">
+				<xpath expr="//search//group" position="inside">
+					<filter name="by_marketplace_state" string="Seller"
+						domain="[]" context="{'group_by':'marketplace_seller_id'}" groups="odoo_marketplace.marketplace_officer_group"/>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="mp_rental_inherit_order_contract_view_tree" model="ir.ui.view">
+			<field name="name">mp.rental.order.contract.tree.view</field>
+			<field name="model">rental.order.contract</field>
+			<field name="mode">primary</field>
+			<field name="inherit_id" ref="odoo_sale_rental.rental_order_contract_view_tree"/>
+			<field name="arch" type="xml">
+				<xpath expr="//tree//field[@name='rental_customer_id']" position="after">
+					<field name="marketplace_seller_id"/>
+				</xpath>
+				<xpath expr="//tree//field[@name='tax_ids']" position="replace"/>
+				<xpath expr="//tree//field[@name='product_rental_agreement_id']" position="replace"/>
+			</field>
+		</record>
+
+		<record id="mp_rental_inherit_order_contract_view_form" model="ir.ui.view">
+			<field name="name">mp.rental.order.contract.form.view</field>
+			<field name="model">rental.order.contract</field>
+			<field name="mode">primary</field>
+			<field name="priority" eval="16"/>
+			<field name="inherit_id" ref="odoo_sale_rental.rental_order_contract_view_form"/>
+			<field name="arch" type="xml">
+				<form position="attributes">
+					<attribute name="create">0</attribute>
+					<attribute name="edit">0</attribute>
+				</form>
+				<xpath expr="//button[@name='create_rental_invoice']" position="attributes">
+					<attribute name="groups">odoo_marketplace.marketplace_officer_group</attribute>
+				</xpath>
+				<xpath expr="//button[@name='action_reverse_transfer']" position="attributes">
+					<attribute name="groups">odoo_marketplace.marketplace_officer_group</attribute>
+				</xpath>
+				<xpath expr="//field[@name='rental_customer_id']" position="attributes">
+					<attribute name="context">{'show_address': 1, 'form_view_ref':'odoo_marketplace.customer_form_view_for_marketplace'}</attribute>
+					<attribute name="options">{"always_reload": True,"no_open": True}</attribute>
+				</xpath>
+				<xpath expr="//field[@name='rental_product_id']" position="attributes">
+					<attribute name="context">{'form_view_ref':'marketplace_sale_rental.mp_rental_inherit_wk_seller_product_form_view'}</attribute>
+					<attribute name="groups">odoo_marketplace.marketplace_officer_group</attribute>
+				</xpath>
+				<xpath expr="//field[@name='rental_product_id']" position="after">
+					<field name="rental_product_id" groups="!odoo_marketplace.marketplace_officer_group" options="{'always_reload': True,'no_open': True}" readonly="1" string="Rental Product"/>
+				</xpath>
+				<xpath expr="//field[@name='sale_order_line_id']" position="attributes">
+					<attribute name="context">{'form_view_ref':'marketplace_sale_rental.mp_rental_inherit_wk_seller_ol_form_view'}</attribute>
+					<attribute name="groups">odoo_marketplace.marketplace_officer_group</attribute>
+				</xpath>
+				<xpath expr="//field[@name='sale_order_line_id']" position="after">
+					<field name="sale_order_line_id" groups="!odoo_marketplace.marketplace_officer_group" options="{'always_reload': True,'no_open': True}" readonly="1" string="Sale Order"/>
+				</xpath>
+				<xpath expr="//field[@name='total_deposit_security_amount']" position="attributes">
+					<attribute name="string">Security Deposited</attribute>
+				</xpath>
+				<xpath expr="//field[@name='stock_move_ids']" position="attributes">
+					<attribute name="context">{'form_view_ref':'odoo_marketplace.view_move_form_for_mp','tree_view_ref':'odoo_marketplace.stock_picking_stock_move_tree_view_for_mp'}</attribute>
+				</xpath>
+				<xpath expr="//field[@name='invoice_line_ids']" position="replace">
+					<field name="invoice_line_ids" readonly="1" >
+						<tree>
+							<field name="sequence" widget="handle"/>
+							<field name="product_id" domain="[('sale_ok','=',True)]"/>
+							<field name="ref" column_invisible="True"/>
+							<field name="name" column_invisible="True"/>
+							<field name="quantity"/>
+							<field name="product_uom_id" groups="uom.group_uom"/>
+							<field name="price_unit"/>
+							<field name="discount" groups="base.group_no_one"/>
+							<field name="tax_ids" widget="many2many_tags" options="{'no_create': True}"/>
+							<field name="price_subtotal" sum="Total Amount"/>
+							<field name="seller_commission" sum="Total Seller Commission" widget="monetary"/>
+							<field name="currency_id" column_invisible="True"/>
+						</tree>
+					</field>
+				</xpath>
+				<xpath expr="//field[@name='message_follower_ids']" position="attributes">
+					<attribute name="groups">odoo_marketplace.marketplace_officer_group</attribute>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="mp_rental_inherit_picking_stock_modified_form_view" model="ir.ui.view">
+	        <field name="name">mp.rental.stock.picking.inherit</field>
+	        <field name="model">stock.picking</field>
+	        <field name="inherit_id" ref="odoo_marketplace.marketplace_picking_stock_modified_form_view" />
+	        <field name="arch" type="xml">
+	            <xpath expr="//header" position="after">
+	                <field name="is_rental_picking" invisible="1"/>
+	                <div class="alert alert-info" role="alert" style="margin-bottom:0px;" invisible="not is_rental_picking">
+	                    <center>This picking is related to rental sale.</center>
+	                </div>
+	            </xpath>
+	        </field>
+	    </record>
+
+		<record id="marketplace_rental_contract_action" model="ir.actions.act_window">
+	        <field name="name">Marketplace Rental Contracts</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">rental.order.contract</field>
+	        <field name="domain">[('state','not in',['new']),('sale_order_line_id.marketplace_seller_id','!=',False)]</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="context">{'search_default_by_marketplace_state':1,'mp_rental':1}</field>
+	        <field name="help" type="html">
+	            <p class="oe_view_nocontent_create">
+	                You can create Rental Contract by creating and confiming Sale Order.
+	            </p>
+	        </field>
+			<field name="view_ids" eval="[ (5, 0, 0),
+				(0, 0, {'sequence': 1, 'view_mode': 'tree', 'view_id': ref('marketplace_sale_rental.mp_rental_inherit_order_contract_view_tree')}),
+				(0, 0, {'sequence': 2, 'view_mode': 'form', 'view_id': ref('marketplace_sale_rental.mp_rental_inherit_order_contract_view_form')}),]"
+			/>
+	    </record>
+	</data>
+
+</odoo>

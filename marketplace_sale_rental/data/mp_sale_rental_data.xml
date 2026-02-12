@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+<odoo>
+
+		<data noupdate="1">
+			<record model="marketplace.dashboard" id="quotes_demo">
+	            <field name="name">Marketplace Rental Orders</field>
+	            <field name="state">rental_order</field>
+	            <field name="color">9</field>
+	        </record>
+			<record id="odoo_marketplace.wk_seller_slae_order_line_action" model="ir.actions.act_window">
+				<field name="domain">[('state','not in',('draft','sent')),('marketplace_seller_id','in',['get_marketplace_seller_id()']),('is_rental_order','=', False)]</field>
+			</record>
+			<record id="odoo_marketplace.wk_seller_slae_order_line_action" model="ir.actions.act_window">
+				<field name="domain">[('state', 'not in', ('draft', 'sent')), ('marketplace_seller_id', 'in', [47]), ('is_rental_order', '=', False)]</field>
+			</record>
+		</data>
+
+</odoo>
