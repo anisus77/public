@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+
+<odoo>
+    <record id="inherited_sale_order_view_form_rental_sale" model="ir.ui.view">
+        <field name="name">sale.order</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_view_invoice']" position="before">
+                <button type="object" name="action_view_rental_contract" class="oe_stat_button" icon="fa-globe icon" invisible="not is_rental_so">
+                    <span class="o_stat_text">Rental Contract</span>
+                </button>
+            </xpath>
+            <xpath expr="//notebook/page/field[@name='order_line']" position="before">
+                <button name="%(odoo_sale_rental.rental_order_wizard_action)d" string="Add Rental Product"
+                    type="action" class="oe_highlight mt8 mb8"/>
+            </xpath>
+            <xpath expr="//group[hasclass('oe_subtotal_footer')]" position="after">
+                <field name="is_rental_so" invisible="1"/>
+                <group class="oe_subtotal_footer oe_right" invisible="not is_rental_so">
+                    <field name="total_deposit_security_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                </group>
+            </xpath>
+            <xpath expr="//notebook//form//field[@name='tax_id']" position="after">
+                <field name="rental_tenure" invisible="not is_rental_order" readonly="is_rental_order"/>
+                <field name="rental_uom_id" invisible="not is_rental_order" readonly="is_rental_order"/>
+                <field name="unit_security_amount" invisible="not is_rental_order" readonly="is_rental_order"/>
+                <field name="is_rental_order" readonly="1" string="Rental Order"/>
+            </xpath>
+            <xpath expr="//notebook//form//field[@name='product_id']" position="attributes">
+                <attribute name="readonly">is_rental_order</attribute>
+            </xpath>
+            <xpath expr="//notebook//form//field[@name='product_uom_qty']" position="attributes">
+                <attribute name="readonly">is_rental_order</attribute>
+            </xpath>
+            <xpath expr="//notebook//form//field[@name='product_uom']" position="attributes">
+                <attribute name="readonly">is_rental_order</attribute>
+            </xpath>
+            <xpath expr="//notebook//form//field[@name='price_unit']" position="attributes">
+                <attribute name="readonly">is_rental_order</attribute>
+            </xpath>
+
+            <xpath expr="//tree" position="inside">
+                <field name="is_rental_order" readonly="1" string="Rental Order"/>
+            </xpath>
+
+            <xpath expr="//tree/field[@name='tax_id']" position="after">
+                <field name="rental_tenure" readonly="1"/>
+                <field name="rental_uom_id" readonly="1"/>
+                <field name="unit_security_amount" readonly="1" required="0"/>
+                <field name="is_rental_order" invisible="1"/>
+            </xpath>
+            <xpath expr="//tree/field[@name='product_id']" position="attributes">
+                <attribute name="readonly">is_rental_order</attribute>
+            </xpath>
+            <xpath expr="//tree/field[@name='product_uom_qty']" position="attributes">
+                <attribute name="readonly">is_rental_order</attribute>
+            </xpath>
+            <xpath expr="//tree/field[@name='product_uom']" position="attributes">
+                <attribute name="readonly">is_rental_order</attribute>
+            </xpath>
+            <xpath expr="//tree/field[@name='price_unit']" position="attributes">
+                <attribute name="readonly">is_rental_order</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
