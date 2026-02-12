@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+<odoo>
+    <data noupdate="0">
+
+        <record id="show_seller_adv" model="ir.rule">
+            <field name="name">Show Seller Advertisements to Seller</field>
+            <field name="model_id" ref="model_sale_order_line"/>
+            <field name="domain_force">[('order_id.partner_id.id', '=', user.partner_id.id)]</field>
+            <field name="groups" eval="[(4, ref('odoo_marketplace.marketplace_seller_group'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+
+        </record>
+
+
+    </data>
+</odoo>
