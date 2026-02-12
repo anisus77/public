@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+<odoo>
+    <data>
+        <!-- Update product price on product page in case of booking product -->
+        <template id="booking_product_price_template" inherit_id="website_sale.product_price">
+            <xpath expr="//div" position="after">
+                <div class="product_price mt16" itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" t-if="product.is_booking_type">
+                    <h4 class="oe_price_h4" style="background: #EFF9FC;padding: 15px 18px;margin: 0;">
+                        <span>Price Onward </span>
+                        <b style="white-space: nowrap;font-weight: 100;" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" t-out="product.currency_id._convert(product.get_booking_onwards_price(),website.currency_id,website.company_id,datetime.date.today())"/>
+                    </h4>
+                    <h4 class="d-none oe_not_available bg-warning">Product not available</h4>
+                </div>
+            </xpath>
+            <xpath expr="//div" position="attributes">
+                <attribute name="t-if">not product.is_booking_type</attribute>
+            </xpath>
+        </template>
+        <!-- Hide product quantity on product page in case of booking product -->
+        <template id="booking_product_quantity_template" inherit_id="website_sale.product_quantity">
+            <xpath expr="///div[contains(@t-attf-class,'css_quantity')]" position="attributes">
+                <attribute name="t-if">not product.is_booking_type</attribute>
+            </xpath>
+        </template>
+        <!-- Update product price view on product list and grid view page in case of booking product -->
+        <template id="booking_products_item_template" inherit_id="website_sale.products_item">
+            <xpath expr="//div[hasclass('product_price')]/span[1]" position="before">
+                <t t-if="product.is_booking_type">
+                    <span t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" t-out="product.currency_id._convert(product.get_booking_onwards_price(),website.currency_id,website.company_id,datetime.date.today())"/>
+                </t>
+            </xpath>
+            <xpath expr="//div[hasclass('product_price')]/span[1]" position="attributes">
+                <attribute name="t-if">(template_price_vals['price_reduce'] or not website.prevent_zero_price_sale) and not product.is_booking_type</attribute>
+            </xpath>
+            <xpath expr="//div[hasclass('product_price')]/span[2]" position="replace">
+                <!-- i commented this one -->
+                <!-- <span class="h6 mb-0" t-else="">-->
+                <!-- <span class="h6 mb-0">
+                    <t t-if="not product.is_booking_type">
+                        <t t-esc="website.prevent_zero_price_sale_text"/>
+                    </t>
+                </span> -->
+            </xpath>
+        </template>
+        <!-- Update Add to cart button of Product list view and grid view page: redirect to product page in case of booking product -->
+        <template id="booking_products_add_to_cart" inherit_id="website_sale.products_item">
+            <xpath expr="//div[hasclass('o_wsale_product_btn')]" position="attributes">
+                <attribute name="t-if">not product.is_booking_type</attribute>
+                <!-- <a t-if="product.is_booking_type" class="btn btn-secondary" t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']&gt;1 else None))" aria-label="Shopping cart" title="Shopping cart"><span class="fa fa-shopping-cart" /></a>-->
+            </xpath>
+            <!-- <xpath expr="//div[hasclass('o_wsale_product_btn')]/t[@t-if='product_variant_id']" position="attributes"><attribute name="t-if">product_variant_id and not product.is_booking_type</attribute></xpath>-->
+        </template>
+        <template id="booking_product_cart_template" inherit_id="website_sale.cart_lines">
+            <!-- Booking product attrinutes -->
+            <xpath expr="//div[@id='cart_products']//div//div[hasclass('flex-grow-1')]" position="before">
+                <t t-set="bk_product_temp" t-value="line.product_id.product_tmpl_id"/>
+                <t t-if="bk_product_temp.is_booking_type" t-set="bk_av_qty" t-value="bk_product_temp.get_bk_slot_available_qty(line.booking_date, line.booking_slot_id.id)"/>
+            </xpath>
+            <!-- Booking product details in cart line -->
+            <xpath expr="//div[@id='cart_products']//div//div[hasclass('flex-grow-1')]//t[1]" position="after">
+                <div t-if="bk_product_temp.is_booking_type">
+                    <div style="font-size: 13px;padding: 2px 0;color: #2c2c36d1;">
+                        <span t-options="{&quot;widget&quot; : &quot;date&quot;, &quot;format&quot;: &quot;MMM, d y&quot;}" t-out="line.booking_date"/>
+                        <span>| Slot: </span>
+                        <span t-if="line.booking_slot_id.time_slot_id" t-out="line.booking_slot_id.time_slot_id.name_get()[0][1]"/>
+                    </div>
+                    <div class="bk_cart_plan">
+                        <span class="text-capitalize" t-out="line.booking_slot_id.plan_id.name"/>
+                        <span style="white-space: nowrap;" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" t-out="line.booking_slot_id.currency_id._convert(line.booking_slot_id.price,website.currency_id,website.company_id,datetime.date.today())"/>
+                    </div>
+                </div>
+            </xpath>
+            <!-- Hide remove button in case of sold product in cart line -->
+            <xpath expr="//div[@id='cart_products']//div//div[hasclass('flex-grow-1')]//div//a[hasclass('js_delete_product')]" position="after">
+                <a aria-label="Remove from cart" class="remove-cart-line no-decoration" href="#" t-att-data-line="line.id" t-att-data-no="line.product_id.id" t-if="bk_product_temp.is_booking_type" title="Remove from cart">Remove</a>
+            </xpath>
+            <xpath expr="//div[@id='cart_products']//div//div[hasclass('flex-grow-1')]//div//a[hasclass('js_delete_product')]" position="attributes">
+                <attribute name="t-if">not bk_product_temp.is_booking_type</attribute>
+            </xpath>
+            <!-- Add readonly quantity column in cart row in case of booking product and also add sold out condition in cart line with delete button  -->
+            <xpath expr="//div[@id='cart_products']//div//div[hasclass('d-flex','flex-column','align-items-end')]" position="after">
+                <div class="text-center td-qty" t-att-data-line-id="line.id" t-att-data-product-id="line.product_id.id" t-if="bk_product_temp.is_booking_type">
+                    <div class="css_quantity input-group mx-auto justify-content-center">
+                        <div class="input-group-prepend">
+                            <a aria-label="Remove one" class="btn btn-link d-none d-md-inline-block" style="cursor: not-allowed;" title="Remove one">
+                                <i class="fa fa-minus"/>
+                            </a>
+                        </div>
+                        <input class="js_quantity form-control quantity border-start-0 border-end-0" readonly="1" t-att-value="int(line.product_uom_qty)" type="text"/>
+                        <div class="input-group-append">
+                            <a aria-label="Add one" class="btn btn-link float_left d-none d-md-inline-block" style="cursor: not-allowed;" title="Add one">
+                                <i class="fa fa-plus"/>
+                            </a>
+                        </div>
+                    </div>
+                    <t t-if="int(bk_av_qty) &lt; 0">
+                        <div class="cart-line-error-md  d-none d-sm-block">
+                            <i class="fa fa-exclamation-triangle"/>Sold Out</div>
+                        <div class="cart-line-error-xs d-block d-sm-none">
+                            <i class="fa fa-exclamation-triangle"/>Sold Out</div>
+                    </t>
+                </div>
+            </xpath>
+            <!-- Hide base quantity column in case of booking product in cart line -->
+            <xpath expr="//div[@id='cart_products']//div//div[hasclass('d-flex','flex-column','align-items-end')]" position="attributes">
+                <attribute name="t-if">not bk_product_temp.is_booking_type</attribute>
+            </xpath>
+        </template>
+        <!-- Hide Proceed To Checkout button in case of sold product in cart  -->
+        <template id="bk_product_cart_line_validate_button" inherit_id="website_sale.navigation_buttons">
+            <xpath expr="//a[@name='website_sale_main_button']" position="attributes">
+                <attribute name="t-att-style">'' if website.bk_products_validation() else 'display:none;'</attribute>
+            </xpath>
+        </template>
+    </data>
+</odoo>
